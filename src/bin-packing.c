@@ -54,7 +54,6 @@ typedef struct bin
    int *itens; /** Ponteiro para os itens que o BIN possui */
    int left; /** Representa o espaço dísponivel no BIN */
    int count; /** Qauntidade de itens existentes no BIN */
-   int size; /** Qauntidade de itens que o BIN comporta */
 } bin;
 
 /**
@@ -64,7 +63,6 @@ typedef struct bin_list
 {
    bin *itens; /** Ponteiro para os BINs que a lista possui */
    int count; /** Representa a quantidade de BINs existentes na lista */
-   int size; /** Qauntidade de BINs que podem existir na lista */
 } bin_list;
 
 /** A Quantidade de números que devem ser colocados nos BINs */
@@ -125,6 +123,7 @@ int main(int argc, char **argv)
       printf("2 - Tamanhos dos BINs \n");
       printf("3 - Valor míximo dos números \n");
       printf("4 - Valor mánimo do números \n");
+      printf("5 - Valores a serem empacotados (Opcional) \n");
       exit(1);
    }
 
@@ -378,19 +377,17 @@ int comparison_numbers (const void * a, const void * b) {
 bin* create_empty_bin ()
 {
    bin *b = malloc(sizeof(bin));
-   int *itens = malloc(sizeof(int));
+   /*int *itens = malloc(sizeof(int));
+   
+   if (itens == NULL)
+      exit(1);*/
 
    if (b == NULL)
       exit(1);
 
-   if (itens == NULL)
-      exit(1);
-
-   b->itens = itens;
+   /*b->itens = itens;*/
    b->left = BIN_SIZE;
    b->count = 0;
-   b->size = 1;
-
    return b;
 }
 
@@ -402,18 +399,11 @@ bin* create_empty_bin ()
 bin_list* create_empty_bin_list ()
 {
    bin_list *list = malloc(sizeof(bin_list));
-   bin *b = malloc(sizeof(bin));
-
-   if (b == NULL)
-      exit(0);
 
    if (list == NULL)
       exit(0);
 
-   list->itens = b;
    list->count = 0;
-   list->size = 1;
-
    return list;
 }
 
@@ -429,9 +419,19 @@ bin_list* create_empty_bin_list ()
 int insert_number_bin (bin *b, int num) {
 
    if (num <= b->left) {
-      if (b->size == b->count) {
+
+      if (b->count == 0)
+      {
+         int *itens = malloc(sizeof(int));
+
+         if (itens == NULL)
+            exit(1);
+
+         b->itens = itens;
+      }
+      else
+      {
          b->itens = realloc(b->itens, sizeof(int)*(b->count+1));
-         b->size++;
       }
 
       b->left -= num;
@@ -456,9 +456,19 @@ int insert_bin_list (bin_list *list, bin *b) {
    if (list->count > NUMBERS_QUANTITY) {
       return 1;
    } else {
-      if (list->size == list->count) {
+
+      if (list->count == 0)
+      {
+         bin *bins = malloc(sizeof(bin));
+
+         if (bins == NULL)
+            exit(1);
+
+         list->itens = bins;
+      }
+      else
+      {
          list->itens = realloc(list->itens, sizeof(bin)*(list->count+1));
-         list->size++;
       }
 
       list->itens[list->count] = *b;
@@ -473,7 +483,6 @@ int insert_bin_list (bin_list *list, bin *b) {
  * Função para imprimir um BIN, mostrando as informações principais
  * dele.
  *    - Quantidade que resta para o BIN ser preenchido (left);
- *    - Tamanho do BIN (size);
  *    - Qauntidade de itens inseridos no BIN, geralemente terá o memso
  *       valor da variavel de tamanho (count);
  *    - E os numeros que exitem nesse BIN (itens).
@@ -484,12 +493,11 @@ int print_bin (bin *b) {
    int *item = b->itens;
    int i;
    printf("Left: %4d", b->left);
-   printf(" | Size: %4d", b->size);
    printf(" | Count: %4d", b->count);
    printf(" | Itens: ");
 
-   for (i = 0; i < b->size; i++) {
-      if (i == b->size - 1)
+   for (i = 0; i < b->count; i++) {
+      if (i == b->count - 1)
          printf("%4d", *(item+i));
       else
          printf("%4d, ", *(item+i));
