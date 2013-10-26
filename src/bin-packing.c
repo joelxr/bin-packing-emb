@@ -51,9 +51,9 @@
  */
 typedef struct bin 
 {
-   int *itens; /** Ponteiro para os itens que o BIN possui */
-   int left; /** Representa o espaço dísponivel no BIN */
-   int count; /** Qauntidade de itens existentes no BIN */
+   unsigned short int *itens; /** Ponteiro para os itens que o BIN possui */
+   unsigned short int left; /** Representa o espaço dísponivel no BIN */
+   unsigned short int count; /** Qauntidade de itens existentes no BIN */
 } bin;
 
 /**
@@ -62,31 +62,31 @@ typedef struct bin
 typedef struct bin_list 
 {
    bin *itens; /** Ponteiro para os BINs que a lista possui */
-   int count; /** Representa a quantidade de BINs existentes na lista */
+   unsigned short int count; /** Representa a quantidade de BINs existentes na lista */
 } bin_list;
 
 /** A Quantidade de números que devem ser colocados nos BINs */
-int NUMBERS_QUANTITY;
+unsigned short int NUMBERS_QUANTITY;
 /** O tamanho do BIN, ou seja, o valor total da soma dos numeros que nele */
-int BIN_SIZE;
+unsigned short int BIN_SIZE;
 /** O valor minimo que deve ser gerado os numeros */
-int NUMBERS_MINIMUM;
+unsigned short int NUMBERS_MINIMUM;
 /** O valor máximo que deve ser gerado os numeros */
-int NUMBERS_MAXIMUM; 
+unsigned short int NUMBERS_MAXIMUM; 
 
 int comparison_numbers (const void * a, const void * b);
-int create_numbers_array (int *values);
+int create_numbers_array (unsigned short int *values);
 bin* create_empty_bin ();
 bin_list* create_empty_bin_list ();
-int fill_bins (int *values, bin_list *bins);
+int fill_bins (unsigned short int *values, bin_list *bins);
 int free_bins (bin_list *bins);
-int generate_random_number (int min, int max);
-int insert_number_bin (bin *b, int num);
+int generate_random_number (unsigned short int min, unsigned short int max);
+int insert_number_bin (bin *b, unsigned short int num);
 int insert_bin_list (bin_list *list, bin *b);
 int print_bin(bin *b);
 int print_list_bins (bin_list *bins);
-int print_numbers (int *values);
-int sort_numbers_array (int *values);
+int print_numbers (unsigned short int *values);
+int sort_numbers_array (unsigned short int *values);
 
 /**
  * Função principal do programa, responsável por executar funções 
@@ -108,8 +108,8 @@ int sort_numbers_array (int *values);
  */ 
 int main(int argc, char **argv)
 {
-   int i;
-   int *values; /** Usa-se ponteiro para armazenar a lista de números. */
+   unsigned short int i;
+   unsigned short int *values; /** Usa-se ponteiro para armazenar a lista de números. */
    bin_list *bins; /** Usa-se ponteiro contem a lsita de BINs gerados dinamicamente. */
 
    /**
@@ -121,8 +121,8 @@ int main(int argc, char **argv)
       printf("Passar os argumentos do programa.\n");
       printf("1 - Quantidade de números para empacotar \n");
       printf("2 - Tamanhos dos BINs \n");
-      printf("3 - Valor míximo dos números \n");
-      printf("4 - Valor mánimo do números \n");
+      printf("3 - Valor mínimo dos números \n");
+      printf("4 - Valor máximo dos números \n");
       printf("5 - Valores a serem empacotados (Opcional) \n");
       exit(1);
    }
@@ -191,7 +191,7 @@ int main(int argc, char **argv)
  */ 
 int free_bins (bin_list *bins)
 {
-   int i;
+   unsigned short int i;
 
    /** 
     * Percorre a lista de BINs passada como parametro, para cada BIN existente
@@ -223,16 +223,16 @@ int free_bins (bin_list *bins)
  * \see insert_bin_list
  * \see NUMBERS_QUANTITY
  */
-int fill_bins (int *values, bin_list *bins)
+int fill_bins (unsigned short int *values, bin_list *bins)
 {
-   int i;
-   int j;
-   int hasInserted = 1; /* 0 - conseguiu inserir, 1 - não inseriu ainda */ 
+   unsigned short int i;
+   unsigned short int j;
+   char hasInserted = 1; /* 0 - conseguiu inserir, 1 - não inseriu ainda */ 
 
    /** Percorre todos os números contidos em \em values, a fim de adionar o número em um respectivo BIN. */
    for (i = 0; i < NUMBERS_QUANTITY; i++)
    {
-      int num = values[i];
+      unsigned short int num = values[i];
 
       /** Para cada número, percorre por todos os BINs existentes na lista de BINs, e tenta inserir o número em algum. */
       for (j = 0; j < bins->count; j++)
@@ -278,7 +278,7 @@ int fill_bins (int *values, bin_list *bins)
  */
 int print_list_bins (bin_list *bins)
 {
-   int i;
+   unsigned short int i;
 
    /**
     * Percorre os elementos que existem na lista de BINs e para cada um deles
@@ -304,8 +304,8 @@ int print_list_bins (bin_list *bins)
  * \param max Valor máximo.
  * \return O número gerado dentro do intervalo passado.
  */ 
-int generate_random_number (int min, int max) {
-   int k;
+int generate_random_number (unsigned short int min, unsigned short int max) {
+   unsigned short int k;
    double d;
    d = (double) rand() / ((double) RAND_MAX + 1);
    k = d * (max - min + 1);
@@ -325,9 +325,9 @@ int generate_random_number (int min, int max) {
  * \see NUMBERS_MINIMUM
  * \see NUMBERS_MAXIMUM
  */
-int create_numbers_array (int *values)
+int create_numbers_array (unsigned short int *values)
 {
-   int i;
+   unsigned short int i;
 
    for (i = 0; i < NUMBERS_QUANTITY; i++)
    {
@@ -347,7 +347,7 @@ int create_numbers_array (int *values)
  * \see NUMBERS_QUANTITY
  * \see comparison_numbers
  */
-int sort_numbers_array (int *values)
+int sort_numbers_array (unsigned short int *values)
 {
    /** Utiliza o Quick Sort para ordernar os numeros. */
    qsort(values, NUMBERS_QUANTITY, sizeof(int), comparison_numbers);
@@ -416,13 +416,13 @@ bin_list* create_empty_bin_list ()
  * \param num Número que deve ser inserido no BIN.
  * \return 1 caso tenha conseguido inserir, ou 0 caso contrário.
  */ 
-int insert_number_bin (bin *b, int num) {
+int insert_number_bin (bin *b, unsigned short int num) {
 
    if (num <= b->left) {
 
       if (b->count == 0)
       {
-         int *itens = malloc(sizeof(int));
+         unsigned short int *itens = malloc(sizeof(int));
 
          if (itens == NULL)
             exit(1);
@@ -431,7 +431,7 @@ int insert_number_bin (bin *b, int num) {
       }
       else
       {
-         b->itens = realloc(b->itens, sizeof(int)*(b->count+1));
+         b->itens = realloc(b->itens, sizeof(unsigned short int)*(b->count+1));
       }
 
       b->left -= num;
@@ -490,8 +490,8 @@ int insert_bin_list (bin_list *list, bin *b) {
  * \param bin Um BIN para ser impresso.
  */ 
 int print_bin (bin *b) {
-   int *item = b->itens;
-   int i;
+   unsigned short int *item = b->itens;
+   unsigned short int i;
    printf("Left: %4d", b->left);
    printf(" | Count: %4d", b->count);
    printf(" | Itens: ");
@@ -513,9 +513,9 @@ int print_bin (bin *b) {
  *
  * \param values Um ponteiro para um array de numéros..
  */ 
-int print_numbers (int *values) {
-   int i;
-   int total = 0;
+int print_numbers (unsigned short int *values) {
+   unsigned short int i;
+   unsigned short int total = 0;
 
    printf("\nNumbers:\n\n");
 
